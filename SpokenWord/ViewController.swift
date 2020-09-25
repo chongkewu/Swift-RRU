@@ -7,6 +7,8 @@ The root view controller that provides a button to start and stop recording, and
 
 import UIKit
 import Speech
+import AVFoundation
+
 
 public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     // MARK: Properties
@@ -22,6 +24,9 @@ public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     @IBOutlet var textView: UITextView!
     
     @IBOutlet var recordButton: UIButton!
+    // [Audio Recorder], add varaible
+    var recordingSession = AVAudioSession.sharedInstance()
+    var myAudioRecorder = AudioRecorder()// end of snippet
     
     // MARK: View Controller Lifecycle
     
@@ -30,6 +35,25 @@ public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         
         // Disable the record buttons until authorization has been granted.
         recordButton.isEnabled = false
+        
+        // [Audio Recorder], initial setup
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default)
+            try recordingSession.setActive(true)
+            recordingSession.requestRecordPermission() { [unowned self] allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        print("load record...")
+                        self.myAudioRecorder.loadAudioRecordingUI(drawview: self.view)
+                    } else {
+                        print("failed to record!")
+                        // failed to record!
+                    }
+                }
+            }
+        } catch {
+            // failed to record!
+        } // end of snippet
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -74,8 +98,10 @@ public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
         self.recognitionTask = nil
         
         // Configure the audio session for the app.
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        // [Audio Recorder], use the same recordingSession, remove extra setup.
+        let audioSession = recordingSession
+//        let audioSession = AVAudioSession.sharedInstance()
+//        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers) // end of snippet
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
 
@@ -142,11 +168,25 @@ public class ViewController: UIViewController, SFSpeechRecognizerDelegate {
     // MARK: Interface Builder actions
     
     @IBAction func recordButtonTapped() {
+        // [Audio Recorder], integrated with start conversation
+        if myAudioRecorder.audioRecorder == nil {
+            myAudioRecorder.startRecording()
+        } else {
+            myAudioRecorder.finishRecording(success: true)
+        }
+        // end of snippet
+        
         if audioEngine.isRunning {
             audioEngine.stop()
             recognitionRequest?.endAudio()
             recordButton.isEnabled = false
             recordButton.setTitle("Stopping", for: .disabled)
+            
+            // [Audio Recorder], extra close
+            if myAudioRecorder.audioRecorder != nil {
+               myAudioRecorder.finishRecording(success: true)
+            }// end of snippet
+                   
         } else {
             do {
                 try startRecording()
