@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5BE934AC251EAEB1002432AD /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE934AB251EAEB1002432AD /* AudioRecorder.swift */; };
+		5BFB1B46253063340075D05A /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BFB1B45253063340075D05A /* Alamofire.framework */; };
 		736165992176725C0062D377 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 736165982176725C0062D377 /* README.md */; };
 		738998B621515C9900E378D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738998B521515C9900E378D8 /* AppDelegate.swift */; };
 		738998B821515C9900E378D8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738998B721515C9900E378D8 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		5BE934AB251EAEB1002432AD /* AudioRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		5BFB1B45253063340075D05A /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		736165982176725C0062D377 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		738998B221515C9900E378D8 /* SpokenWord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpokenWord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		738998B521515C9900E378D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,12 +37,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BFB1B46253063340075D05A /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5BFB1B44253063340075D05A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5BFB1B45253063340075D05A /* Alamofire.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		738998A921515C9900E378D8 = {
 			isa = PBXGroup;
 			children = (
@@ -49,6 +60,7 @@
 				738998B321515C9900E378D8 /* Products */,
 				A1D3FDF0A1D404B000000001 /* Configuration */,
 				A1D3CC30A1D3C80000000001 /* LICENSE */,
+				5BFB1B44253063340075D05A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,6 +112,7 @@
 				738998AE21515C9900E378D8 /* Sources */,
 				738998AF21515C9900E378D8 /* Frameworks */,
 				738998B021515C9900E378D8 /* Resources */,
+				5BFB1B47253063440075D05A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -157,6 +170,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5BFB1B47253063440075D05A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		738998AE21515C9900E378D8 /* Sources */ = {
@@ -316,6 +350,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 845YH86AA7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SpokenWord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -336,6 +374,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 845YH86AA7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SpokenWord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

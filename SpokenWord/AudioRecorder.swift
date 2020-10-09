@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 import AVFoundation
-
+import Alamofire
 
 class AudioRecorder: NSObject,AVAudioRecorderDelegate,AVAudioPlayerDelegate {
     
@@ -75,6 +75,10 @@ class AudioRecorder: NSObject,AVAudioRecorderDelegate,AVAudioPlayerDelegate {
             print("audio is saved \(getDocumentsDirectory().appendingPathComponent("recording.m4a"))")
             
             AudioRecordButton.setTitle("Tap to Re-record", for: .normal)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.uploadToServer(fileURL: self.getDocumentsDirectory().appendingPathComponent("recording.m4a"))
+            }
         } else {
             AudioRecordButton.setTitle("Tap to Record", for: .normal)
             // recording failed :(
@@ -105,4 +109,25 @@ class AudioRecorder: NSObject,AVAudioRecorderDelegate,AVAudioPlayerDelegate {
             finishRecording(success: false)
         }
     }
+    
+    // Upload file function
+        func uploadToServer(fileURL: URL) {
+            print("upload file \(fileURL) to server...")
+            Alamofire.upload(
+                multipartFormData: { multipartFormData in
+                    multipartFormData.append(fileURL, withName: "sampleFile")
+                },
+                to: "http://163.172.129.104:8000/upload",
+                encodingCompletion: { encodingResult in
+                    switch encodingResult {
+                    case .success(let upload, _, _):
+                        upload.responseJSON { response in
+                            debugPrint(response)
+                        }
+                    case .failure(let encodingError):
+                        print(encodingError)
+                    }
+                }
+            )
+        }
 }
